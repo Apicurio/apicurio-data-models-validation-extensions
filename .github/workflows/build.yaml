@@ -19,3 +19,4 @@ jobs:
       - run: npx yarn install
       - run: npx yarn build
       - run: npx yarn test
+      - run: npx yarn run lint
