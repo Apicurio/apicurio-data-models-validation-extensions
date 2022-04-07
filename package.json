@@ -1,0 +1,33 @@
+{
+  "name": "apicurio-data-models-validation-extensions",
+  "version": "1.0.0",
+  "description": "Collection of extensions for the Apicurio Datamodels Validation API",
+  "author": "Enda Phelan <ephelan@redhat.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "workspaces": [
+    "js/packages/*"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "yarn workspaces run build",
+    "clean": "yarn workspaces run clean",
+    "lint": "yarn workspaces run lint",
+    "lint:fix": "yarn workspaces run lint:fix",
+    "prettier": "yarn workspaces run prettier",
+    "prettier:fix": "yarn workspaces run prettier:fix"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "@typescript-eslint/eslint-plugin": "5.17.0",
+    "@typescript-eslint/parser": "5.17.0",
+    "eslint": "8.12.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
+    "prettier": "2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.3",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  }
+}
