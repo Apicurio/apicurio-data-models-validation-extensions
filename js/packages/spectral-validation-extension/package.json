@@ -10,7 +10,8 @@
     "prettier": "prettier 'src/**/*.ts'",
     "prettier:fix": "prettier --write 'src/**/*.ts'",
     "lint": "eslint 'src/**/*.ts'",
-    "lint:fix": "eslint --fix 'src/**/*.ts'"
+    "lint:fix": "eslint --fix 'src/**/*.ts'",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
