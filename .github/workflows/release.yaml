@@ -1,0 +1,42 @@
+name: Release All
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npx yarn install
+      - run: npx yarn build
+      - run: npx yarn test
+
+      - id: set-version
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const version = context.ref.replace(/^refs\/tags\//, '')
+            core.setOutput('version', version)
+
+      - name: Commit package.json
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          npx yarn run bump-version ${{ steps.set-version.outputs.version }}
+
+          git add js/packages/*/package.json
+          git add js/packages/*/package-lock.json
+
+          git commit -m "chore(deps): bump packages to version ${{ steps.set-version.outputs.version }}"
+          git push --dry-run
+
+      - name: Publish to npm
+        run: npx yarn release
