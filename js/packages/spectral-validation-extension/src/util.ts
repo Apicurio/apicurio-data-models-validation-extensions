@@ -1,0 +1,1 @@
+export { bundleAndLoadRuleset } from '@stoplight/spectral-ruleset-bundler/dist/loader/node';
