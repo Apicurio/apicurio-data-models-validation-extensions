@@ -1,13 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Library, ValidationProblem, ValidationProblemSeverity } from 'apicurio-data-models';
 import { truthy } from '@stoplight/spectral-functions';
-import { SpectralValidationExtension } from '../';
+import { fetch } from '@stoplight/spectral-runtime';
+import { SpectralValidationExtension, bundleAndLoadRuleset } from '../';
 import * as path from 'path';
+import * as fs from 'fs';
 
 const oasDocument = {
   openapi: '3.0.0',
   info: {
-    version: '1.0.0',
+    version: '1.0.0'
   },
   servers: [
     {
@@ -18,15 +20,79 @@ const oasDocument = {
 };
 
 describe('Ruleset File', () => {
-  test('Load ruleset from static file', async () => {
-    const spectral = new SpectralValidationExtension({
-      ruleset: path.join(__dirname, '.spectral.js'),
+  describe('Node.js', () => {
+    test('Load ruleset from static YAML file in Node.js', async () => {
+      const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
+  
+      const spectral = new SpectralValidationExtension({
+        ruleset: await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch })
+      });
+  
+      const document = Library.readDocument(oasDocument);
+      const results = await spectral.validateDocument(document);
+  
+      commonExpects(results);
     });
+  
+    test('Load ruleset from static JS file in Node.js', async () => {
+      const rulesetFilepath = path.join(__dirname, ".spectral.js");
+  
+      const spectral = new SpectralValidationExtension({
+        ruleset: await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch })
+      });
+  
+      const document = Library.readDocument(oasDocument);
+      const results = await spectral.validateDocument(document);
+  
+      commonExpects(results);
+    });
+  });
 
-    const document = Library.readDocument(oasDocument);
-    const results = await spectral.validateDocument(document);
+  describe('Browser', () => {
+    const myRuleset = 
+`rules:
+  title-required:
+    given: '$.info'
+    description: 'Info title is required'
+    severity: hint
+    then:
+      function: truthy
+      field: title`;
 
-    commonExpects(results);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fsMock: any = {
+      promises: {
+        async readFile(filepath: string) {
+          if (filepath === "/.spectral.yaml") {
+            return myRuleset;
+          }
+    
+          throw new Error(`Could not read ${filepath}`);
+        },
+      },
+    };
+
+    test('Load ruleset from static YAML file in Browser', async () => {
+      const spectral = new SpectralValidationExtension({
+        ruleset: await bundleAndLoadRuleset('/.spectral.yaml', { fs: fsMock, fetch })
+      });
+  
+      const document = Library.readDocument(oasDocument);
+      const results = await spectral.validateDocument(document);
+  
+      commonExpects(results);
+    });
+  
+    test('Load ruleset from static JS file in Node.js', async () => {
+      const spectral = new SpectralValidationExtension({
+        ruleset: await bundleAndLoadRuleset('/.spectral.yaml', { fs: fsMock, fetch })
+      });
+  
+      const document = Library.readDocument(oasDocument);
+      const results = await spectral.validateDocument(document);
+  
+      commonExpects(results);
+    });
   });
 });
 

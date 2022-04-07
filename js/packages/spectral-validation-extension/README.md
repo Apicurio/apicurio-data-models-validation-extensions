@@ -14,11 +14,15 @@ npm install @apicurio/data-models-spectral-validation-extension
 Load a Spectral ruleset from a configuration file:
 
 ```ts
-import { SpectralValidationExtension } from '@apicurio/data-models-spectral-validation-extension';
+import { SpectralValidationExtension, bundleAndLoadRuleset } from '@apicurio/data-models-spectral-validation-extension';
+import { fetch } from '@stoplight/spectral-runtime';
 import * as path from 'path';
+import * as fs from 'fs';
+
+const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
 
 const spectral = new SpectralValidationExtension({
-	ruleset: path.join(__dirname, '.spectral.js')
+	ruleset: await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch })
 });
 ```
 
@@ -26,7 +30,7 @@ Or you can pass in a ruleset object:
 
 ```ts
 import { SpectralValidationExtension } from '@apicurio/data-models-spectral-validation-extension';
-import { truthy } from "@stoplight/spectral-functions";
+import { truthy } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 const spectral = new SpectralValidationExtension({

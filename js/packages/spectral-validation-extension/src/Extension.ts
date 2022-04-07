@@ -9,10 +9,9 @@ import {
 } from "apicurio-data-models";
 import { ISpectralDiagnostic, Spectral, RulesetDefinition, Ruleset } from "@stoplight/spectral-core";
 import { DiagnosticSeverity } from "@stoplight/types";
-import getRuleset from "./getRuleset";
 
 export interface SpectralValidationOptions {
-  ruleset: Ruleset | RulesetDefinition | string;
+  ruleset: Ruleset | RulesetDefinition;
 }
 
 /**
@@ -43,7 +42,7 @@ export class SpectralValidationExtension implements IDocumentValidatorExtension 
   /**
    * 
    * @param {string} options - Validation configuration options
-   * @param {Object|string} options.ruleset - Spectral ruleset. Can be a ruleset object or a path to a ruleset config file
+   * @param {Object} options.ruleset - Spectral ruleset definition
    */
   constructor(options: SpectralValidationOptions) {
     this.spectral = new Spectral();
@@ -59,11 +58,7 @@ export class SpectralValidationExtension implements IDocumentValidatorExtension 
    */
   async validateDocument(node: Node): Promise<ValidationProblem[]> {
     if (this.cachedRuleset === undefined) {
-      if (typeof this.options.ruleset == "string") {
-        this.cachedRuleset = await getRuleset(this.options.ruleset);
-      } else {
-        this.cachedRuleset = this.options.ruleset;
-      }
+      this.cachedRuleset = this.options.ruleset;
       this.setRuleset(this.cachedRuleset);
     }
 

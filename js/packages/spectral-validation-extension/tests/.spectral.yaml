@@ -1,0 +1,8 @@
+rules:
+  title-required:
+    given: '$.info'
+    description: 'Info title is required'
+    severity: hint
+    then:
+      function: truthy
+      field: title
