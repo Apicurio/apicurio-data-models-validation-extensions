@@ -1,6 +1,6 @@
 {
   "name": "apicurio-data-models-validation-extensions",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Collection of extensions for the Apicurio Datamodels Validation API",
   "author": "Enda Phelan <ephelan@redhat.com>",
   "license": "Apache-2.0",
@@ -10,9 +10,11 @@
   ],
   "scripts": {
     "test": "jest",
+    "bump-version": "yarn workspaces run bump-version",
     "build": "yarn workspaces run build",
     "clean": "yarn workspaces run clean",
     "lint": "yarn workspaces run lint",
+    "release": "yarn workspaces run release",
     "lint:fix": "yarn workspaces run lint:fix",
     "prettier": "yarn workspaces run prettier",
     "prettier:fix": "yarn workspaces run prettier:fix"
