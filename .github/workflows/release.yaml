@@ -8,12 +8,13 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 1
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn build
@@ -33,8 +34,7 @@ jobs:
 
           yarn run bump-version ${{ steps.set-version.outputs.version }}
 
-          git add js/packages/*/package.json
-          git add js/packages/*/package-lock.json
+          git add js/packages/*/package.json js/packages/*/package-lock.json
 
           git commit -m "chore(deps): bump packages to version ${{ steps.set-version.outputs.version }}"
           git push
