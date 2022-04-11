@@ -5,7 +5,7 @@ on:
       - '*'
 
 jobs:
-  release:
+  pre-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,15 +16,23 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn build
       - run: yarn test
-
-      - name: Create '.npmrc' File 
-        uses: filipstefansson/set-npm-token-action@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
 
       - id: set-version
         uses: actions/github-script@v4
@@ -47,6 +55,15 @@ jobs:
 
           git commit -m "chore(deps): bump packages to version ${{ steps.set-version.outputs.version }}"
           git push
+
+  npm-publish:
+    runs-on: ubuntu-latest
+    needs: pre-publish
+    steps:
+      - name: Create '.npmrc' File 
+        uses: filipstefansson/set-npm-token-action@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to npm
         run: ./scripts/releasePackages.sh
