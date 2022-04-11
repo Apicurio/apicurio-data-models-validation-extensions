@@ -1,6 +1,6 @@
 {
   "name": "@apicurio/data-models-spectral-extension",
-  "version": "0.1.0-dev5",
+  "version": "0.1.0-dev6",
   "description": "An extension to validate Spectral rulesets using apicurio-data-models",
   "main": "dist/index.js",
   "scripts": {
