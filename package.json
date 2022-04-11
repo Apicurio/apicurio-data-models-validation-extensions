@@ -14,7 +14,6 @@
     "build": "yarn workspaces run build",
     "clean": "yarn workspaces run clean",
     "lint": "yarn workspaces run lint",
-    "release": "yarn workspaces run release",
     "lint:fix": "yarn workspaces run lint:fix",
     "prettier": "yarn workspaces run prettier",
     "prettier:fix": "yarn workspaces run prettier:fix"
