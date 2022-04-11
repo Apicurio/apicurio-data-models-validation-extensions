@@ -1,6 +1,6 @@
 {
   "name": "@apicurio/data-models-spectral-extension",
-  "version": "0.0.1",
+  "version": "0.1.0-dev2",
   "description": "An extension to validate Spectral rulesets using apicurio-data-models",
   "main": "dist/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "lint:fix": "eslint --fix 'src/**/*.ts'",
     "bump-version": "npm version",
     "prepublish": "npm run build",
-    "release": "npm publish"
+    "release": "./scripts/releasePackages.sh"
   },
   "repository": {
     "type": "git",
