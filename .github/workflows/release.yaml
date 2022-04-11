@@ -39,4 +39,4 @@ jobs:
           git push --dry-run
 
       - name: Publish to npm
-        run: npx yarn release
+        run: ./scripts/releasePackages.sh
