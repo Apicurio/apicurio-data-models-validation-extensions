@@ -20,6 +20,11 @@ jobs:
       - run: yarn build
       - run: yarn test
 
+      - name: Create '.npmrc' File 
+        uses: filipstefansson/set-npm-token-action@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
       - id: set-version
         uses: actions/github-script@v4
         with:
