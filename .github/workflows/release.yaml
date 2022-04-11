@@ -14,9 +14,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npx yarn install
-      - run: npx yarn build
-      - run: npx yarn test
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn build
+      - run: yarn test
 
       - id: set-version
         uses: actions/github-script@v4
@@ -30,13 +31,13 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          npx yarn run bump-version ${{ steps.set-version.outputs.version }}
+          yarn run bump-version ${{ steps.set-version.outputs.version }}
 
           git add js/packages/*/package.json
           git add js/packages/*/package-lock.json
 
           git commit -m "chore(deps): bump packages to version ${{ steps.set-version.outputs.version }}"
-          git push --dry-run
+          git push
 
       - name: Publish to npm
         run: ./scripts/releasePackages.sh
