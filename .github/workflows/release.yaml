@@ -12,6 +12,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
+          token: ${{ secrets.ACCESS_TOKEN }}
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
