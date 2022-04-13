@@ -45,9 +45,6 @@ jobs:
         run: |
           git config --global user.name "apicurio-ci[bot]"
           git config --global user.email "apicurio.ci@users.noreply.github.com"
-          
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
 
           yarn bump-version ${{ steps.set-version.outputs.version }}
 
